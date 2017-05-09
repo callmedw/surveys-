@@ -9,6 +9,7 @@ also_reload('lib/**/*.rb')
 
 get('/') do
   @surveys = Survey.all
+  @question = Question.all
   erb(:index)
 end
 
@@ -28,13 +29,13 @@ end
 
 get '/surveys/:id' do
   @survey = Survey.find(params.fetch('id').to_i)
+  @question = Question.all
   erb :survey
 end
 
 patch '/surveys/:id' do
   @survey = Survey.find(params.fetch('id').to_i)
   title = params.fetch('title')
-  # @survey.update({:topic => title})
   if (title.split('').any?)
     @survey.update({:topic => title})
   else
@@ -49,51 +50,22 @@ delete '/surveys/:id' do
   @surveys = Survey.all
   erb :index
 end
-# post("/employees") do
-#   name = params.fetch("name")
-#   division_id = params.fetch('division_id').to_i
-#   @division = Division.find(division_id)
-#   @employee = Employee.create({:name => name, :division_id => division_id})
-#   erb(:success)
-# end
 
+get '/questions/:id' do
+  @question = Question.find(params.fetch('id').to_i)
+  erb :question
+end
 
+patch '/questions/:id' do
+  question = params.fetch('question')
+  @question = Question.find(params.fetch('id').to_i)
+  @question.update({:description => question})
+  redirect "/"
+end
 
-#
-# get("/divisions/:id") do
-#   @division = Division.find(params.fetch("id").to_i())
-#   erb(:division)
-# end
-#
-# get("/divisions/:id/edit") do
-#   @division = Division.find(params.fetch("id").to_i())
-#   erb(:division_edit)
-# end
-#
-# patch("/divisions/:id") do
-#   @title = params.fetch("title")
-#   @division = Division.find(params.fetch("id").to_i())
-#   @division.update({:title => title})
-#   erb(:division)
-# end
-#
-# delete("/divisions/:id") do
-#   @division = Division.find(params.fetch("id").to_i())
-#   @division.delete()
-#   @divisions = Division.all()
-#   erb(:index)
-# end
-#
-# post("/employees") do
-#   name = params.fetch("name")
-#   division_id = params.fetch('division_id').to_i
-#   @division = Division.find(division_id)
-#   @employee = Employee.create({:name => name, :division_id => division_id})
-#   erb(:success)
-# end
-#
-#
-# get('/employees/:id/edit') do
-#   @employee = Employee.find(params.fetch("id").to_i())
-#   erb(:employee_edit)
-# end
+delete '/questions/:id' do
+  @question = Question.find(params.fetch('id').to_i)
+  @question.delete
+  @questions = Question.all
+  redirect '/'
+end

@@ -19,7 +19,7 @@
 <% if @survey.questions.any? %>
 <ol>
   <% @survey.questions.each do |question| %>
-    <li><%= question.description %></li>
+    <li><a href='/questions/<%= question.id() %>'><%= question.description %></a></li>
   <% end %>
 </ol>
 <% else %>
