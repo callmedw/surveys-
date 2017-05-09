@@ -1,0 +1,13 @@
+<h1><%= @survey.topic %></h1>
+
+<% if @survey.questions.any? %>
+<ol>
+  <% @survey.questions.each do |question| %>
+    <li><%= question.description %></li>
+  <% end %>
+</ol>
+<% else %>
+  <p>There are no questions yet!</p>
+<% end %>
+
+<a href="/">Back</a>

@@ -1,0 +1,38 @@
+<h1>Welcome to the Survey Site</h1>
+
+<p>Create a new survey:</p>
+
+<form action="/surveys" method="post">
+  <label for="topic">Assign a title to your survey:</label>
+  <input id="topic" name="topic" type="text">
+
+  <button type="submit">Add survey</button>
+</form>
+
+<p> Add questions to a survey:</p>
+
+<form action="/questions" method="post">
+  <label for="survey_id">Select a Survey:</label>
+  <select id='survey_id' name='survey_id' type='text'>
+    <% @surveys.each() do |survey| %>
+      <option value="<%= survey.id()%>"> <%= survey.topic() %> </option>
+    <% end %>
+  </select>
+
+  <label for="question">Type a question:</label>
+  <input id="question" name="question" type="text">
+
+  <button type="submit">Add question</button>
+</form>
+
+<% if @surveys.any?() %>
+<p>Click on a survey to see its questions:</p>
+
+<ul>
+  <% @surveys.each do |survey| %>
+  <li><a href="/surveys/<%= survey.id() %>"><%= survey.topic() %></a></li>
+  <% end %>
+</ul>
+<% else %>
+<p>There are no surveys yet!</p>
+<% end %>
