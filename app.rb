@@ -19,10 +19,10 @@ post('/surveys') do
 end
 
 post('/questions') do
-  @question_input = params.fetch('question')
+  question_input = params.fetch('question')
   survey_id = params.fetch('survey_id').to_i
   @survey = Survey.find(survey_id)
-  @question = Question.create({:description => question, :survey_id => survey_id})
+  @question = Question.create({:description => question_input, :survey_id => survey_id})
   erb(:success)
 end
 
@@ -31,6 +31,24 @@ get '/surveys/:id' do
   erb :survey
 end
 
+patch '/surveys/:id' do
+  @survey = Survey.find(params.fetch('id').to_i)
+  title = params.fetch('title')
+  # @survey.update({:topic => title})
+  if (title.split('').any?)
+    @survey.update({:topic => title})
+  else
+    @survey.update({:topic => "#{@survey.topic}"})
+  end
+  erb :survey
+end
+
+delete '/surveys/:id' do
+  @survey = Survey.find(params.fetch('id').to_i)
+  @survey.delete
+  @surveys = Survey.all
+  erb :index
+end
 # post("/employees") do
 #   name = params.fetch("name")
 #   division_id = params.fetch('division_id').to_i
